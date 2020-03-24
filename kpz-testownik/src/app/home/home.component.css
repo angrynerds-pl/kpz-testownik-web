@@ -1,0 +1,21 @@
+.content-container {
+  position: relative;
+
+  overflow: auto;
+  height: 300px;
+  min-height: 0;
+  margin: 8px 16px;
+  border-radius: 4px;
+
+  background-color: var(--dark);
+}
+
+.dropzone-container {
+  height: 100%;
+}
+
+.dz-message {
+  background-color: var(--dark) !important;
+  color: white;
+  border-color: var(--primary);
+}
