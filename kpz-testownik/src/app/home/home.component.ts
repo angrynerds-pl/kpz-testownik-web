@@ -1,43 +1,48 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
 
-import { DropzoneComponent, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import {
+  DropzoneComponent,
+  DropzoneConfigInterface
+} from "ngx-dropzone-wrapper";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: "app-home",
+  templateUrl: "./home.component.html",
+  styleUrls: ["./home.component.css"],
   encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent {
   public disabled: boolean = false;
-
   public config: DropzoneConfigInterface = {
     clickable: true,
     maxFiles: 1,
     autoReset: 5000,
     errorReset: 5000,
     cancelReset: 5000,
-    acceptedFiles: '.json',
+    acceptedFiles: ".json",
+    url: "https://httpbin.org/post",
+    createImageThumbnails: true
   };
-
-  @ViewChild(DropzoneComponent, { static: false }) componentRef?: DropzoneComponent;
-
+  /*
+  @ViewChild(DropzoneComponent, { static: false })
+  componentRef?: DropzoneComponent;
+*/
   constructor() {}
 
   public onUploadInit(args: any): void {
-    console.log('onUploadInit:', args);
+    console.log("onUploadInit:", args);
   }
 
   public onUploadError(args: any): void {
-    console.log('onUploadError:', args);
+    console.log("onUploadError:", args);
   }
 
   public onUploadSuccess(args: any): void {
-   console.log('onUploadSuccess:', args);
+    console.log("onUploadSuccess:", args);
   }
 
   public onUploadSending(args: any): void {
-    let formData : FormData = args[2];
-    formData.append('user', '{"userName": "jan"}');
+    let formData: FormData = args[2];
+    formData.append("user", '{"userName": "jan"}');
   }
 }
