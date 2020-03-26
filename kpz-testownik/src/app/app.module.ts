@@ -13,6 +13,9 @@ import { AppRoutingModule } from "./app-routing.module";
 import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
+import { InitComponent } from './init/init.component';
+import { QuestionComponent } from './question/question.component';
+import { SummaryComponent } from './summary/summary.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -24,7 +27,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     AppComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    InitComponent,
+    QuestionComponent,
+    SummaryComponent
   ],
   imports: [
     BrowserModule,

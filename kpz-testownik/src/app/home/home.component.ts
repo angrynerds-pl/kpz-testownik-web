@@ -1,4 +1,5 @@
 import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Router } from "@angular/router"
 
 import {
   DropzoneComponent,
@@ -27,7 +28,7 @@ export class HomeComponent {
   @ViewChild(DropzoneComponent, { static: false })
   componentRef?: DropzoneComponent;
 */
-  constructor() {}
+  constructor(public router : Router) {}
 
   public onUploadInit(args: any): void {
     console.log("onUploadInit:", args);
@@ -39,6 +40,7 @@ export class HomeComponent {
 
   public onUploadSuccess(args: any): void {
     console.log("onUploadSuccess:", args);
+    this.router.navigate(['init']);
   }
 
   public onUploadSending(args: any): void {
