@@ -1,25 +1,31 @@
 <div style="text-align: center;">
-    <div class="card border-primary mb-3" style="display: inline-block; width: 700px;">
-        <div class="card-header"><h4>On which paradigm is Scala language based on?</h4></div>
-        <div class="card-body">
-            <div class="btn-group-vertical" style="width: 100%;">
-                <button type="button" class="btn btn-primary"><h5>Functional</h5></button>
-                <button type="button" class="btn btn-primary"><h5>Object oriented</h5></button>
-                <button type="button" class="btn btn-primary"><h5>Procedural</h5></button>
-             </div>
-             <label style="padding-top: 20px;">Your progress</label>
-             <div class="progress">
-                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-              <div style="padding-top: 20px;height: 80px;">
-                <div style="float: left; padding: 10px; width: 50%;">
-                    <button type="button" class="btn btn-warning" style="width: 100%;"><h5>Check</h5></button>
-                </div>
-                <div style="float: left; padding: 10px; width: 50%;">
-                    <button type="button" class="btn btn-secondary" style="width: 100%;" routerLink="/summary"><h5>Next</h5></button>
-                </div>
-              </div>
-        </div>
+  <div class="card border-primary mb-3">
+    <div class="card-header">
+      <h4>{{currentQuestion.question_text}}</h4>
     </div>
+    <div class="card-body">
+      <div *ngFor="let answer of currentQuestion.answers; index as i;" class="btn-group-vertical" style="width: 100%;">
+        <button type="checkbox" class="btn btn-primary my-1" (click)="onAnswerSelect(i)"
+          [class.active]="isAnswerSelected[i]" autocomplete="off">
+          <h5>{{answer.answer_text}}</h5>
+        </button>
+      </div>
+      <label style="padding-top: 20px;">Your progress</label>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="getProgress() + '%'"></div>
+      </div>
+      <div style="padding-top: 20px;height: 80px;">
+        <div style="float: left; padding: 10px; width: 50%;">
+          <button type="button" class="btn btn-warning" style="width: 100%;" routerLink="/summary" >
+            <h5>Check</h5>
+          </button>
+        </div>
+        <div style="float: left; padding: 10px; width: 50%;">
+          <button type="button" class="btn btn-secondary" style="width: 100%;" (click)="nextQuestion()">
+            <h5>Next</h5>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
