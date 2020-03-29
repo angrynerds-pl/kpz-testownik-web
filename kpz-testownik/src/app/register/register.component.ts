@@ -1,6 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { first } from "rxjs/operators";
+
+import { UserService } from "../user.service";
+import { AuthenticationService } from "../authentication.service";
 
 @Component({
   selector: "app-register",
@@ -14,8 +18,14 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private userService: UserService,
+    private authenticationService: AuthenticationService
+  ) {
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(["/"]);
+    }
+  }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group(
@@ -46,6 +56,18 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.router.navigate([this.returnUrl]);
+    delete this.registerForm.value.confirmPassword;
+    this.userService
+      .register(this.registerForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          console.log(`{username: }`);
+          this.router.navigate(["/login"]);
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 }

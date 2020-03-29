@@ -1,6 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 
 import {
   DropzoneModule,
@@ -16,10 +17,11 @@ import { RegisterComponent } from "./register/register.component";
 import { InitComponent } from './init/init.component';
 import { QuestionComponent } from './question/question.component';
 import { SummaryComponent } from './summary/summary.component';
+import { TokenInterceptor } from './token.interceptor';
+import { ErrorInterceptor } from './error.interceptor';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
-
 };
 
 @NgModule({
@@ -30,19 +32,19 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RegisterComponent,
     InitComponent,
     QuestionComponent,
-    SummaryComponent
+    SummaryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     DropzoneModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    {
-      provide: DROPZONE_CONFIG,
-      useValue: DEFAULT_DROPZONE_CONFIG
-    }
+    { provide: DROPZONE_CONFIG, useValue: DEFAULT_DROPZONE_CONFIG },
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
