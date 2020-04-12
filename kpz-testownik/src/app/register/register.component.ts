@@ -5,6 +5,7 @@ import { first } from "rxjs/operators";
 
 import { UserService } from "../user.service";
 import { AuthenticationService } from "../authentication.service";
+import { MessageService } from '../message.service';
 
 @Component({
   selector: "app-register",
@@ -20,7 +21,8 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private userService: UserService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(["/"]);
@@ -52,6 +54,8 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
+    this.messageService.clear();
+
     if (this.registerForm.invalid) {
       return;
     }
@@ -62,11 +66,11 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          console.log(`{username: }`);
+          this.messageService.success('Pomyślnie zarejestrowano użytkownika', true);
           this.router.navigate(["/login"]);
         },
         error => {
-          console.log(error);
+          this.messageService.error(error);
         }
       );
   }

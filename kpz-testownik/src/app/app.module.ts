@@ -20,6 +20,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { TokenInterceptor } from './token.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
 import { TopBarComponent } from './top-bar/top-bar.component';
+import { MessageComponent } from './message/message.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
@@ -35,6 +36,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     QuestionComponent,
     SummaryComponent,
     TopBarComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,

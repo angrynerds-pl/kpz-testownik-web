@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-top-bar',
@@ -10,7 +11,8 @@ export class TopBarComponent implements OnInit {
   isCollapsed: boolean = true;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +27,7 @@ export class TopBarComponent implements OnInit {
 
   logout(): void {
     this.authenticationService.logout();
+    this.router.navigate(["/"]);
   }
 
   isLoggedIn(): boolean {
