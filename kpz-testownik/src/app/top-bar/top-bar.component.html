@@ -10,7 +10,7 @@
         <a class="nav-link" href="#">item</a>
       </li> -->
     </ul>
-    <div *ngIf="isLoggedIn">
+    <div *ngIf="isLoggedIn()">
       <span class="mx-4 text-info">{{currenUserName()}}</span>
       <button class="btn btn-secondary" type="submit" (click)="logout()">Wyloguj się</button>
     </div>
