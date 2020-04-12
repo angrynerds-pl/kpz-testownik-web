@@ -1,0 +1,18 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark jumbotron-custom">
+  <a class="navbar-brand" href="/home.php">Testownik</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" (click)="isCollapsed = !isCollapsed">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse collapse" [class.show]="!isCollapsed">
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item">
+        <a class="nav-link" href="#">item</a>
+      </li> -->
+    </ul>
+    <div *ngIf="isLoggedIn">
+      <span class="mx-4 text-info">{{currenUserName()}}</span>
+      <button class="btn btn-secondary" type="submit" (click)="logout()">Wyloguj się</button>
+    </div>
+  </div>
+</nav>
