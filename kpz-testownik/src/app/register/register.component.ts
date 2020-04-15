@@ -1,6 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { first } from "rxjs/operators";
+
+import { UserService } from "../user.service";
+import { AuthenticationService } from "../authentication.service";
+import { MessageService } from '../message.service';
 
 @Component({
   selector: "app-register",
@@ -14,8 +19,15 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private userService: UserService,
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService
+  ) {
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(["/"]);
+    }
+  }
 
   ngOnInit(): void {
     this.registerForm = this.formBuilder.group(
@@ -42,10 +54,24 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
+    this.messageService.clear();
+
     if (this.registerForm.invalid) {
       return;
     }
 
-    this.router.navigate([this.returnUrl]);
+    delete this.registerForm.value.confirmPassword;
+    this.userService
+      .register(this.registerForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.messageService.success('Pomyślnie zarejestrowano użytkownika', true);
+          this.router.navigate(["/login"]);
+        },
+        error => {
+          this.messageService.error(error);
+        }
+      );
   }
 }
