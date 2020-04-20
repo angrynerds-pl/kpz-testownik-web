@@ -1,10 +1,9 @@
 import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router"
 
-import {
-  DropzoneComponent,
-  DropzoneConfigInterface
-} from "ngx-dropzone-wrapper";
+import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
+import { MessageService } from '../message.service';
+import { QuizService } from '../quiz.service';
 
 @Component({
   selector: "app-home",
@@ -13,38 +12,45 @@ import {
   encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent {
-  public disabled: boolean = false;
-  public config: DropzoneConfigInterface = {
-    clickable: true,
-    maxFiles: 1,
-    autoReset: 5000,
-    errorReset: 5000,
-    cancelReset: 5000,
-    acceptedFiles: ".json",
-    url: "https://httpbin.org/post",
-    createImageThumbnails: true
-  };
-  /*
-  @ViewChild(DropzoneComponent, { static: false })
-  componentRef?: DropzoneComponent;
-*/
-  constructor(public router : Router) {}
+  public files: NgxFileDropEntry[] = [];
 
-  public onUploadInit(args: any): void {
-    console.log("onUploadInit:", args);
+  constructor(
+    public router : Router,
+    public messageService : MessageService,
+    public quizService: QuizService
+    ) {}
+
+  ngOnInit(): void {
+
   }
 
-  public onUploadError(args: any): void {
-    console.log("onUploadError:", args);
+  public dropped(files: NgxFileDropEntry[]) {
+    this.files = files;
+    if (this.files.length !== 1) {
+      this.messageService.error("Akceptowane są tylko pojedyncze pliki JSON z testem");
+    } else {
+      const droppedFile = files[0];
+
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.quizService.loadQuizFile(file).then(isValid => {
+            if (isValid) {
+              this.router.navigate(["/init"]);
+            } else {
+              this.messageService.error("Akceptowane są tylko pojedyncze pliki JSON z testem");
+            }
+          });
+        });
+      }
+    }
   }
 
-  public onUploadSuccess(args: any): void {
-    console.log("onUploadSuccess:", args);
-    this.router.navigate(['init']);
+  public fileOver(event){
+    console.log(event);
   }
 
-  public onUploadSending(args: any): void {
-    let formData: FormData = args[2];
-    formData.append("user", '{"userName": "jan"}');
+  public fileLeave(event){
+    console.log(event);
   }
 }

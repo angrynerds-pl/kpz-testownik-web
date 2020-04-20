@@ -1,14 +1,19 @@
 <div style="text-align: center;">
   <div class="card border-primary mb-3">
     <div class="card-header">
-      <h4>{{currentQuestion.question_text}}</h4>
+      <h4>{{currentQuestion.content}}</h4>
     </div>
     <div class="card-body">
-      <div *ngFor="let answer of currentQuestion.answers; index as i;" class="btn-group-vertical" style="width: 100%;">
-        <button type="checkbox" class="btn btn-primary my-1" (click)="onAnswerSelect(i)"
-          [class.active]="isAnswerSelected[i]" autocomplete="off">
-          <h5>{{answer.answer_text}}</h5>
-        </button>
+      <div *ngIf='currentQuestion.questionType == "TrueFalse"'>
+asas
+      </div>
+      <div *ngIf='currentQuestion.questionType != "TrueFalse"'>
+        <div *ngFor="let answer of currentQuestion.answers; index as i;" class="btn-group-vertical" style="width: 100%;">
+          <button type="checkbox" class="btn btn-primary my-1" (click)="onAnswerSelect(i)"
+            [class.active]="isAnswerSelected[i]" autocomplete="off">
+            <h5>{{answer.content}}</h5>
+          </button>
+        </div>
       </div>
       <label style="padding-top: 20px;">Your progress</label>
       <div class="progress">

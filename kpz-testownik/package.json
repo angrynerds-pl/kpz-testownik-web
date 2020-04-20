@@ -22,6 +22,7 @@
     "http-status-codes": "^1.4.0",
     "jwt-decode": "^2.2.0",
     "ngx-dropzone-wrapper": "^9.0.0",
+    "ngx-file-drop": "^9.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

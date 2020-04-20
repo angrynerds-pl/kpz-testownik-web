@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
-import { Question } from "../question.model";
-import { test } from "../test-mock";
+import { QuizService } from '../quiz.service';
+import { Quiz, Question, QuestionType } from '../quiz.model.ts';
 
 @Component({
   selector: "app-question",
@@ -9,18 +9,20 @@ import { test } from "../test-mock";
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
-  test: Question[];
+  quiz: Quiz;
   currentQuestion: Question;
   currentQuestionIndex: number = 0;
   isAnswerSelected: Array<boolean>;
 
-  constructor() {}
+  constructor(
+    public quizService: QuizService
+  ) {}
   // these operations on date should be done with service
   // but it's only for presentation
   ngOnInit(): void {
-    this.test = test;
-    if (this.test.length > 0) {
-      this.currentQuestion = this.test[this.currentQuestionIndex];
+    this.quiz = this.quizService.quiz;
+    if (this.quiz.questions.length > 0) {
+      this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
     }
     this.isAnswerSelected =
       new Array(this.currentQuestion.answers.length).fill(false);
@@ -28,8 +30,8 @@ export class QuestionComponent implements OnInit {
 
   nextQuestion(): void {
     ++this.currentQuestionIndex;
-    if(this.currentQuestionIndex < this.test.length) {
-      this.currentQuestion = this.test[this.currentQuestionIndex];
+    if(this.currentQuestionIndex < this.quiz.questions.length) {
+      this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
       this.isAnswerSelected.fill(false);
     }
     else {
@@ -38,7 +40,7 @@ export class QuestionComponent implements OnInit {
   }
 
   getProgress(): number {
-    return (this.currentQuestionIndex + 1) / this.test.length * 100;
+    return this.currentQuestionIndex / this.quiz.questions.length * 100;
   }
 
   onAnswerSelect(index: number): void {
