@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Quiz } from './quiz.model.ts';
+import { Quiz, isQuiz } from './quiz.model.ts';
+import { resolve } from 'dns';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +11,39 @@ export class QuizService {
   constructor() { }
 
   public async loadQuizFile(file: File): Promise<boolean> {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const quizText = reader.result as string;
-      this.quiz = JSON.parse(quizText);
+    let readPromise = (file: File) => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => {
+          reader.abort();
+          reject(new DOMException("Problem parsing input file."));
+        }
+        reader.onload = () => {
+          resolve(reader.result as string);
+        }
+        reader.readAsText(file);
+      })
     }
-    reader.readAsText(file);
 
-    return true;
+    let isQuizValid = false;
+    try {
+      var fileText = await readPromise(file)
+    } catch (e) {
+      console.log(e)
+    }
+
+    var quizObject = JSON.parse(fileText);
+    if (this.validateQuizJson(quizObject)) {
+      isQuizValid = true;
+      this.quiz = quizObject;
+    } else {
+      isQuizValid = false;
+    }
+
+    return isQuizValid;
   }
 
-  private validateQuizJson(text: string): boolean {
-    return false;
+  private validateQuizJson(quizObject: any): boolean {
+    return isQuiz(quizObject);
   }
 }

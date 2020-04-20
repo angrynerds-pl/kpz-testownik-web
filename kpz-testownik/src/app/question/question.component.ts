@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
 import { QuizService } from '../quiz.service';
-import { Quiz, Question, QuestionType } from '../quiz.model.ts';
+import { Quiz, Question } from '../quiz.model.ts';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-question",
@@ -13,19 +14,26 @@ export class QuestionComponent implements OnInit {
   currentQuestion: Question;
   currentQuestionIndex: number = 0;
   isAnswerSelected: Array<boolean>;
+  test: number;
 
   constructor(
-    public quizService: QuizService
-  ) {}
-  // these operations on date should be done with service
-  // but it's only for presentation
+    public quizService: QuizService,
+    public route: ActivatedRoute
+  ) {
+    route.params.subscribe(val => {
+      this.quiz = this.quizService.quiz;
+      if (this.quiz.questions.length > 0) {
+        this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
+      }
+      this.isAnswerSelected =
+        new Array(this.currentQuestion.answers.length).fill(false);
+
+      console.log(this.quiz)
+    })
+  }
+
   ngOnInit(): void {
-    this.quiz = this.quizService.quiz;
-    if (this.quiz.questions.length > 0) {
-      this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
-    }
-    this.isAnswerSelected =
-      new Array(this.currentQuestion.answers.length).fill(false);
+
   }
 
   nextQuestion(): void {

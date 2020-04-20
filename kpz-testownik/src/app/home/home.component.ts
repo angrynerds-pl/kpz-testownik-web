@@ -33,6 +33,7 @@ export class HomeComponent {
 
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        console.log(fileEntry.name)
         fileEntry.file((file: File) => {
           this.quizService.loadQuizFile(file).then(isValid => {
             if (isValid) {
