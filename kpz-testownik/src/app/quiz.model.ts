@@ -1,5 +1,3 @@
-import { element } from 'protractor'
-
 export enum QuestionType {
   SingleAnswere = "SingleAnswere",
   MultipleAnswere = "MultipleAnswere",

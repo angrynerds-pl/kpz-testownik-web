@@ -1,45 +1,53 @@
-import { Component, ViewChild, ViewEncapsulation } from "@angular/core";
-import { Router } from "@angular/router"
+import {
+  Component,
+  ViewChild,
+  ViewEncapsulation,
+  ElementRef,
+} from "@angular/core";
+import { Router } from "@angular/router";
 
-import { NgxFileDropEntry, FileSystemFileEntry } from 'ngx-file-drop';
-import { MessageService } from '../message.service';
-import { QuizService } from '../quiz.service';
+import { NgxFileDropEntry, FileSystemFileEntry } from "ngx-file-drop";
+import { MessageService } from "../message.service";
+import { QuizService } from "../quiz.service";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.css"],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
   public files: NgxFileDropEntry[] = [];
+  @ViewChild("initQuizButton") initQuizButton: ElementRef;
 
   constructor(
-    public router : Router,
-    public messageService : MessageService,
+    private router: Router,
+    public messageService: MessageService,
     public quizService: QuizService
-    ) {}
+  ) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   public dropped(files: NgxFileDropEntry[]) {
     this.files = files;
     if (this.files.length !== 1) {
-      this.messageService.error("Akceptowane są tylko pojedyncze pliki JSON z testem");
+      this.messageService.error(
+        "Akceptowane są tylko pojedyncze pliki JSON z testem"
+      );
     } else {
       const droppedFile = files[0];
 
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        console.log(fileEntry.name)
+        console.log(fileEntry.name);
         fileEntry.file((file: File) => {
-          this.quizService.loadQuizFile(file).then(isValid => {
+          this.quizService.loadQuizFile(file).then((isValid) => {
             if (isValid) {
-              this.router.navigate(["/init"]);
+              this.initQuizButton.nativeElement.click();
             } else {
-              this.messageService.error("Akceptowane są tylko pojedyncze pliki JSON z testem");
+              this.messageService.error(
+                "Akceptowane są tylko pojedyncze pliki JSON z testem"
+              );
             }
           });
         });
@@ -47,11 +55,11 @@ export class HomeComponent {
     }
   }
 
-  public fileOver(event){
+  public fileOver(event) {
     console.log(event);
   }
 
-  public fileLeave(event){
+  public fileLeave(event) {
     console.log(event);
   }
 }
