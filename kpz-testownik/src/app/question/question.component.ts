@@ -57,7 +57,7 @@ export class QuestionComponent implements OnInit {
     if (this.learnedCount === 0) {
       return "0%";
     }
-    return (this.quizService.questionCount / this.learnedCount) * 100 + "%";
+    return (this.learnedCount / this.quizService.questionCount) * 100 + "%";
   }
 
   getCorrectProgress(): string {
@@ -65,7 +65,7 @@ export class QuestionComponent implements OnInit {
       return "0%";
     }
     return (
-      ((this.correctCount + this.incorrectCount) / this.correctCount) * 100 +
+      (this.correctCount / (this.correctCount + this.incorrectCount)) * 100 +
       "%"
     );
   }
@@ -75,7 +75,7 @@ export class QuestionComponent implements OnInit {
       return "0%";
     }
     return (
-      ((this.correctCount + this.incorrectCount) / this.incorrectCount) * 100 +
+      (this.incorrectCount / (this.correctCount + this.incorrectCount)) * 100 +
       "%"
     );
   }
@@ -126,7 +126,9 @@ export class QuestionComponent implements OnInit {
   onCheckQuestion(): void {
     this.wasCheckButtonClicked = true;
 
-    const isAnswereCorrect = this.isAnswereCorrect(this.currentQuestion.questionType);
+    const isAnswereCorrect = this.isAnswereCorrect(
+      this.currentQuestion.questionType
+    );
     if (isAnswereCorrect) {
       ++this.correctCount;
       ++this.learnedCount;
