@@ -1,14 +1,22 @@
-<div style="text-align: center;">
-<div class="card border-primary mb-3">
-    <div class="card-header"><h3>questions.json</h3></div>
-    <div class="card-body">
-      <h4 class="card-title" style="padding: 30px;">Questions count: 56</h4>
-      <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/question">
-        Start
-      </button>
-      <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/home.php">
-        Back
-      </button>
-    </div>
+<div class="card mb-3">
+  <h3 class="card-header">{{quizName}}</h3>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Autor</span>
+      <span>{{authorName}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Liczba pytań</span>
+      <span>{{questionCount}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Bazowa liczba powtórzeń</span>
+      <span>{{baseRepeatCount}}</span>
+    </li>
+  </ul>
 </div>
+
+<div class="text-right">
+  <button class="btn btn-primary" routerLink="/question">Rozpocznij</button>
+  <a class="btn btn-link" routerLink="/">Anuluj</a>
 </div>

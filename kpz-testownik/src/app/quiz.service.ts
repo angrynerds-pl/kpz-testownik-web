@@ -45,4 +45,20 @@ export class QuizService {
   private validateQuizJson(quizObject: any): boolean {
     return isQuiz(quizObject);
   }
+
+  public get quizName(): string {
+    return this.quiz.quizName;
+  }
+
+  public get authorName(): string {
+    return this.quiz.authorName;
+  }
+
+  public get questionCount(): number {
+    return this.quiz.questions.length;
+  }
+
+  public get baseRepeatCount(): number {
+    return this.quiz.singleQuestionRepeat;
+  }
 }
