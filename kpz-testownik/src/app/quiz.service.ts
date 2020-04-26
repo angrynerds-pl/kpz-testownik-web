@@ -7,7 +7,9 @@ import { Quiz, isQuiz } from "./quiz.model";
 export class QuizService {
   quiz: Quiz;
 
-  constructor() {}
+  constructor() {
+    this.quiz = JSON.parse(sessionStorage.getItem("currentQuiz"));
+  }
 
   public async loadQuizFile(file: File): Promise<boolean> {
     let isQuizValid = false;
@@ -20,6 +22,7 @@ export class QuizService {
     var quizObject = JSON.parse(fileText);
     if (this.validateQuizJson(quizObject)) {
       isQuizValid = true;
+      sessionStorage.setItem("currentQuiz", JSON.stringify(quizObject));
       this.quiz = quizObject;
     } else {
       isQuizValid = false;
@@ -60,5 +63,9 @@ export class QuizService {
 
   public get baseRepeatCount(): number {
     return this.quiz.singleQuestionRepeat;
+  }
+
+  public get currentQuiz(): Quiz {
+    return this.quiz;
   }
 }
