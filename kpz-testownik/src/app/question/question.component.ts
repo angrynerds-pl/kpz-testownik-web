@@ -64,14 +64,20 @@ export class QuestionComponent implements OnInit {
     if (this.correctCount === 0) {
       return "0%";
     }
-    return (this.correctCount + this.incorrectCount) / this.correctCount * 100 + "%";
+    return (
+      ((this.correctCount + this.incorrectCount) / this.correctCount) * 100 +
+      "%"
+    );
   }
 
   getIncorrectProgress(): string {
     if (this.incorrectCount === 0) {
       return "0%";
     }
-    return (this.correctCount + this.incorrectCount) / this.incorrectCount * 100 + "%";
+    return (
+      ((this.correctCount + this.incorrectCount) / this.incorrectCount) * 100 +
+      "%"
+    );
   }
 
   onAnswerSelect(index: number, value?: boolean): void {
@@ -89,20 +95,38 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  onCheckQuestion(): void {
-    this.wasCheckButtonClicked = true;
+  isAnswereCorrect(questionType: QuestionType) {
+    let correctChoices: Array<boolean>;
 
-    const correctChoices = this.userAnswere.map((value, index) => {
-      return (
-        this.currentQuestion.answers[index].isCorrect === value ||
-        (this.currentQuestion.answers[index].isCorrect === false &&
-          value === undefined)
-      );
-    });
+    switch (questionType) {
+      case QuestionType.MultipleAnswere:
+      case QuestionType.SingleAnswere:
+        correctChoices = this.userAnswere.map((v, i) => {
+          return (
+            this.currentQuestion.answers[i].isCorrect === v ||
+            (this.currentQuestion.answers[i].isCorrect === false &&
+              v === undefined)
+          );
+        });
+        break;
+      case QuestionType.TrueFalse:
+        correctChoices = this.userAnswere.map((v, i) => {
+          return this.currentQuestion.answers[i].isCorrect === v;
+        });
+        break;
+    }
 
     const isAnswereCorrect = correctChoices.every((value) => {
       return value;
     });
+
+    return isAnswereCorrect;
+  }
+
+  onCheckQuestion(): void {
+    this.wasCheckButtonClicked = true;
+
+    const isAnswereCorrect = this.isAnswereCorrect(this.currentQuestion.questionType);
     if (isAnswereCorrect) {
       ++this.correctCount;
       ++this.learnedCount;
