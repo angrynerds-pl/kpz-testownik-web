@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-
+import { Router } from "@angular/router"
 import { Question } from "../question.model";
-import { test } from "../test-mock";
+import { test } from "../test-mock"
+import { score } from "../score"
 
 @Component({
   selector: "app-question",
@@ -13,12 +14,16 @@ export class QuestionComponent implements OnInit {
   currentQuestion: Question;
   currentQuestionIndex: number = 0;
   isAnswerSelected: Array<boolean>;
+  scoreArray: Array<boolean>;
+  buttonType: string = "btn btn-warning";
 
-  constructor() {}
+  constructor(public router : Router) {}
+
   // these operations on date should be done with service
   // but it's only for presentation
   ngOnInit(): void {
     this.test = test;
+    this.scoreArray = new Array(this.test.length).fill(false);
     if (this.test.length > 0) {
       this.currentQuestion = this.test[this.currentQuestionIndex];
     }
@@ -31,9 +36,10 @@ export class QuestionComponent implements OnInit {
     if(this.currentQuestionIndex < this.test.length) {
       this.currentQuestion = this.test[this.currentQuestionIndex];
       this.isAnswerSelected.fill(false);
+      this.buttonType = "btn btn-warning";
     }
     else {
-      // navigate to summary
+      this.router.navigate(['summary']);
     }
   }
 
@@ -41,7 +47,19 @@ export class QuestionComponent implements OnInit {
     return (this.currentQuestionIndex + 1) / this.test.length * 100;
   }
 
+  checkAnswer(): void{
+    if(this.scoreArray[this.currentQuestionIndex])
+      this.buttonType="btn btn-success";
+    else
+      this.buttonType="btn btn-danger"; 
+  }
+
   onAnswerSelect(index: number): void {
-    this.isAnswerSelected[index] = !this.isAnswerSelected[index];
+    if(test[this.currentQuestionIndex].answers[index].is_correct==true)
+      this.scoreArray[this.currentQuestionIndex]=true;
+    else
+      this.scoreArray[this.currentQuestionIndex]=false;
+    
+      this.buttonType = "btn btn-warning";
   }
 }

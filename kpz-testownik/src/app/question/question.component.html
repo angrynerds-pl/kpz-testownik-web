@@ -4,19 +4,21 @@
       <h4>{{currentQuestion.question_text}}</h4>
     </div>
     <div class="card-body">
-      <div *ngFor="let answer of currentQuestion.answers; index as i;" class="btn-group-vertical" style="width: 100%;">
-        <button type="checkbox" class="btn btn-primary my-1" (click)="onAnswerSelect(i)"
+      <div *ngFor="let answer of currentQuestion.answers; index as i;" class="btn-group-vertical" style="width: 100%; padding-bottom: 5px;">
+        <button type="checkbox" class="btn btn-primary" (click)="onAnswerSelect(i)"
           [class.active]="isAnswerSelected[i]" autocomplete="off">
           <h5>{{answer.answer_text}}</h5>
         </button>
       </div>
+
+      
       <label style="padding-top: 20px;">Your progress</label>
       <div class="progress">
         <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="getProgress() + '%'"></div>
       </div>
       <div style="padding-top: 20px;height: 80px;">
         <div style="float: left; padding: 10px; width: 50%;">
-          <button type="button" class="btn btn-warning" style="width: 100%;" routerLink="/summary" >
+          <button type="button" [class]="buttonType" style="width: 100%;" (click)="checkAnswer()" >
             <h5>Check</h5>
           </button>
         </div>
