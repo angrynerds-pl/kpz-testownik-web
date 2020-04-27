@@ -12,17 +12,21 @@
                 <div class="col-lg-8 align-self-center">
                   <span class="text-white">{{answer.content}}</span>
                 </div>
-                <div class="col-lg-2">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, true)"
-                    [class.active]="userAnswere[i]">
-                    <span class="text-white text-nowrap">Prawda</span>
-                  </button>
-                </div>
-                <div class="col-lg-2">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, false)"
-                    [class.active]="userAnswere[i] === false">
-                    <span class="text-white text-nowrap">Fałsz</span>
-                  </button>
+                <div class="col-lg-4">
+                  <div class="row">
+                    <div class="col">
+                      <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, true)"
+                        [class.active]="userAnswere[i]">
+                        <span class="text-white text-nowrap">Prawda</span>
+                      </button>
+                    </div>
+                    <div class="col">
+                      <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, false)"
+                        [class.active]="userAnswere[i] === false">
+                        <span class="text-white text-nowrap">Fałsz</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -43,25 +47,29 @@
                 <div class="col-lg-8 align-self-center">
                   <span class="text-white">{{answer.content}}</span>
                 </div>
-                <div class="col-lg-2">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, true)"
-                  [ngClass]="{
-                    'btn-outline-secondary': isCorrect(i, false) && userAnswere[i] === undefined,
-                    'btn-outline-danger': isCorrect(i, false) && userAnswere[i],
-                    'btn-outline-warning': isCorrect(i, true) && !userAnswere[i],
-                    'btn-outline-success': isCorrect(i, true) && userAnswere[i]}">
-                    <span class="text-white text-nowrap">Prawda</span>
-                  </button>
-                </div>
-                <div class="col-lg-2">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, false)"
-                    [ngClass]="{
-                    'btn-outline-secondary': isCorrect(i, true) && userAnswere[i] === undefined,
-                    'btn-outline-danger': isCorrect(i, true) && userAnswere[i] === false,
-                    'btn-outline-warning': isCorrect(i, false) && userAnswere[i] !== false,
-                    'btn-outline-success': isCorrect(i, false) && userAnswere[i] === false}">
-                    <span class="text-white text-nowrap">Fałsz</span>
-                  </button>
+                <div class="col-lg-4">
+                  <div class="row">
+                    <div class="col">
+                      <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, true)"
+                      [ngClass]="{
+                        'btn-outline-secondary': isCorrect(i, false) && !userAnswere[i],
+                        'btn-outline-danger': isCorrect(i, false) && userAnswere[i],
+                        'btn-outline-warning': isCorrect(i, true) && !userAnswere[i],
+                        'btn-outline-success': isCorrect(i, true) && userAnswere[i]}">
+                        <span class="text-white text-nowrap">Prawda</span>
+                      </button>
+                    </div>
+                    <div class="col">
+                      <button type="checkbox" class="btn btn-block btn-outline-secondary" (click)="onAnswerSelect(i, false)"
+                        [ngClass]="{
+                        'btn-outline-secondary': isCorrect(i, true) && userAnswere[i] !== false,
+                        'btn-outline-danger': isCorrect(i, true) && userAnswere[i] === false,
+                        'btn-outline-warning': isCorrect(i, false) && userAnswere[i] !== false,
+                        'btn-outline-success': isCorrect(i, false) && userAnswere[i] === false}">
+                        <span class="text-white text-nowrap">Fałsz</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

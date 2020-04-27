@@ -2,6 +2,13 @@ import { Component, OnInit } from "@angular/core";
 
 import { QuizService } from "../quiz.service";
 import { Quiz, Question, QuestionType } from "../quiz.model";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { QuizResult } from "../quiz-result.model";
+import { UserService } from "../user.service";
+import { AuthenticationService } from "../authentication.service";
+import { first } from "rxjs/operators";
+import { Router } from "@angular/router";
 
 enum UserChoice {
   NotMarkedButCorrect = "NotMarkedButCorrect",
@@ -25,7 +32,11 @@ export class QuestionComponent implements OnInit {
   incorrectCount = 0;
   learnedCount = 0;
 
-  constructor(private quizService: QuizService) {
+  constructor(
+    private quizService: QuizService,
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.quiz = this.quizService.quiz;
   }
 
@@ -45,7 +56,29 @@ export class QuestionComponent implements OnInit {
       this.userAnswere.fill(undefined);
       this.wasCheckButtonClicked = false;
     } else {
-      // navigate to summary
+      const result: QuizResult = {
+        quizName: this.quizService.quizName,
+        time: 10,
+        singleQuestionRepeat: this.quizService.baseRepeatCount,
+        numberOfQuestions: this.quizService.questionCount,
+        wrongAnswers: this.incorrectCount,
+        correctAnswers: this.correctCount,
+        date: new Date(),
+      };
+      this.http
+        .post(`${environment.apiUrl}/quiz/result`, result)
+        .pipe(first())
+        .subscribe(
+          () => {
+            //this.router.navigate(["/"]);
+          },
+          (error) => {
+            console.log(error);
+            //this.messageService.error(error);
+          }
+        );
+
+      this.router.navigate(["summary"], { state: { result: result } });
     }
   }
 

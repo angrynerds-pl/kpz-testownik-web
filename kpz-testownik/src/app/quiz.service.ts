@@ -15,11 +15,11 @@ export class QuizService {
     let isQuizValid = false;
     try {
       var fileText = await this.readQuizFile(file);
+      var quizObject = JSON.parse(fileText);
     } catch (e) {
       console.log(e);
     }
 
-    var quizObject = JSON.parse(fileText);
     if (this.validateQuizJson(quizObject)) {
       isQuizValid = true;
       sessionStorage.setItem("currentQuiz", JSON.stringify(quizObject));
