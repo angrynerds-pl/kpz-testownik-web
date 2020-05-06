@@ -1,21 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
-import { QuizService } from "../quiz.service";
-import { Quiz, Question, QuestionType } from "../quiz.model";
-import { HttpClient } from "@angular/common/http";
-import { environment } from "src/environments/environment";
-import { QuizResult } from "../quiz-result.model";
-import { UserService } from "../user.service";
-import { AuthenticationService } from "../authentication.service";
-import { first } from "rxjs/operators";
-import { Router } from "@angular/router";
-
-enum UserChoice {
-  NotMarkedButCorrect = "NotMarkedButCorrect",
-  NotMarkedButIncorrect = "NotMarkedButIncorrect",
-  MarkedAndCorrect = "MarkedAndCorrect",
-  MarkedAndIncorrect = "MarkedAndIncorrect",
-}
+import { Question, QuestionType } from "../quiz.model";
+import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-question",
@@ -23,128 +9,68 @@ enum UserChoice {
   styleUrls: ["./question.component.css"],
 })
 export class QuestionComponent implements OnInit {
-  quiz: Quiz;
-  currentQuestion: Question;
-  currentQuestionIndex: number = 0;
-  userAnswere: Array<boolean>;
-  wasCheckButtonClicked: boolean = false;
-  correctCount = 0;
-  incorrectCount = 0;
-  learnedCount = 0;
+  @Input() question: Question;
+  @Input() check: Subject<void> = new Subject<void>();
+  @Input() next: Subject<void> = new Subject<void>();
+  @Output() answered: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(
-    private quizService: QuizService,
-    private http: HttpClient,
-    private router: Router
-  ) {
-    this.quiz = this.quizService.quiz;
-  }
+  userAnswers: Array<boolean>;
+  wasChecked: boolean = false;
+
+  private checkSubscription: Subscription;
+  private nextSubscription: Subscription;
+
+  constructor() {}
 
   ngOnInit(): void {
-    if (this.quiz.questions.length > 0) {
-      this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
-    }
-    this.userAnswere = new Array<boolean>(this.quizService.questionCount).fill(
+    this.checkSubscription = this.check.subscribe(() => this.onCheck());
+    this.nextSubscription = this.next.subscribe(() => this.onNext());
+
+    this.userAnswers = new Array<boolean>(this.question.answers.length).fill(
       undefined
     );
   }
 
-  nextQuestion(): void {
-    ++this.currentQuestionIndex;
-    if (this.currentQuestionIndex < this.quiz.questions.length) {
-      this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
-      this.userAnswere.fill(undefined);
-      this.wasCheckButtonClicked = false;
-    } else {
-      const result: QuizResult = {
-        quizName: this.quizService.quizName,
-        time: 10,
-        singleQuestionRepeat: this.quizService.baseRepeatCount,
-        numberOfQuestions: this.quizService.questionCount,
-        wrongAnswers: this.incorrectCount,
-        correctAnswers: this.correctCount,
-        date: new Date(),
-      };
-      this.http
-        .post(`${environment.apiUrl}/quiz/result`, result)
-        .pipe(first())
-        .subscribe(
-          () => {
-            //this.router.navigate(["/"]);
-          },
-          (error) => {
-            console.log(error);
-            //this.messageService.error(error);
-          }
-        );
-
-      this.router.navigate(["summary"], { state: { result: result } });
-    }
+  ngOnDestroy(): void {
+    this.checkSubscription.unsubscribe();
+    this.nextSubscription.unsubscribe();
   }
 
   isCorrect(index: number, value: boolean = true) {
-    return this.currentQuestion.answers[index].isCorrect === value;
-  }
-
-  getLearnedProgress(): string {
-    if (this.learnedCount === 0) {
-      return "0%";
-    }
-    return (this.learnedCount / this.quizService.questionCount) * 100 + "%";
-  }
-
-  getCorrectProgress(): string {
-    if (this.correctCount === 0) {
-      return "0%";
-    }
-    return (
-      (this.correctCount / (this.correctCount + this.incorrectCount)) * 100 +
-      "%"
-    );
-  }
-
-  getIncorrectProgress(): string {
-    if (this.incorrectCount === 0) {
-      return "0%";
-    }
-    return (
-      (this.incorrectCount / (this.correctCount + this.incorrectCount)) * 100 +
-      "%"
-    );
+    return this.question.answers[index].isCorrect === value;
   }
 
   onAnswerSelect(index: number, value?: boolean): void {
-    switch (this.currentQuestion.questionType) {
+    switch (this.question.questionType) {
       case QuestionType.MultipleAnswere:
-        this.userAnswere[index] = !this.userAnswere[index];
+        this.userAnswers[index] = !this.userAnswers[index];
         break;
       case QuestionType.SingleAnswere:
-        this.userAnswere.fill(undefined);
-        this.userAnswere[index] = true;
+        this.userAnswers.fill(undefined);
+        this.userAnswers[index] = true;
         break;
       case QuestionType.TrueFalse:
-        this.userAnswere[index] = value;
+        this.userAnswers[index] = value;
         break;
     }
   }
 
-  isAnswereCorrect(questionType: QuestionType) {
+  isAnswerCorrect(questionType: QuestionType) {
     let correctChoices: Array<boolean>;
 
     switch (questionType) {
       case QuestionType.MultipleAnswere:
       case QuestionType.SingleAnswere:
-        correctChoices = this.userAnswere.map((v, i) => {
+        correctChoices = this.userAnswers.map((v, i) => {
           return (
-            this.currentQuestion.answers[i].isCorrect === v ||
-            (this.currentQuestion.answers[i].isCorrect === false &&
-              v === undefined)
+            this.question.answers[i].isCorrect === v ||
+            (this.question.answers[i].isCorrect === false && v === undefined)
           );
         });
         break;
       case QuestionType.TrueFalse:
-        correctChoices = this.userAnswere.map((v, i) => {
-          return this.currentQuestion.answers[i].isCorrect === v;
+        correctChoices = this.userAnswers.map((v, i) => {
+          return this.question.answers[i].isCorrect === v;
         });
         break;
     }
@@ -156,17 +82,14 @@ export class QuestionComponent implements OnInit {
     return isAnswereCorrect;
   }
 
-  onCheckQuestion(): void {
-    this.wasCheckButtonClicked = true;
+  onNext(): void {
+    this.wasChecked = false;
+    this.userAnswers.fill(undefined);
+  }
 
-    const isAnswereCorrect = this.isAnswereCorrect(
-      this.currentQuestion.questionType
-    );
-    if (isAnswereCorrect) {
-      ++this.correctCount;
-      ++this.learnedCount;
-    } else {
-      ++this.incorrectCount;
-    }
+  onCheck(): void {
+    this.wasChecked = true;
+    const isAnswereCorrect = this.isAnswerCorrect(this.question.questionType);
+    this.answered.emit(isAnswereCorrect);
   }
 }

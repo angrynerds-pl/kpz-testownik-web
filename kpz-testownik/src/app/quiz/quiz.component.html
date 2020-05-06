@@ -1,0 +1,41 @@
+<div class="container-fluid my-2 mx-0 p-0">
+  <div class="row">
+    <div class="col-md-8">
+      <app-question [question]="currentQuestion" [check]="checkSubject.asObservable()"
+        [next]="nextSubject.asObservable()" (answered)="onAnswer($event)"></app-question>
+    </div>
+
+    <div class="col-md-4 bg-dark border border-primary">
+      <div class="py-2">
+        <span>Udzielone odpowiedzi</span>
+        <div class="progress" style="height: 1.5em;">
+          <div class="progress-bar bg-success p" role="progressbar" [style.width]="getCorrectProgress()">
+            {{correctCount}}</div>
+          <div class="progress-bar bg-danger" role="progressbar" [style.width]="getIncorrectProgress()">
+            {{incorrectCount}}</div>
+        </div>
+      </div>
+
+      <div class="pb-2">
+        <span>Opanowane pytania</span>
+        <div class="progress" style="height: 1.5em;">
+          <div class="progress-bar bg-success p" role="progressbar" [style.width]="getLearnedProgress()">
+            {{learnedCount}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4 align-self-end px-0 ">
+      <button *ngIf="!wasCheckButtonClicked" type="button" class="btn btn-primary btn-block" (click)="onCheck()">
+        <h5>Sprawdź</h5>
+      </button>
+      <button *ngIf="wasCheckButtonClicked" type="button" class="btn btn-primary btn-block" (click)="onNext()">
+        <h5>Dalej</h5>
+      </button>
+    </div>
+  </div>
+</div>

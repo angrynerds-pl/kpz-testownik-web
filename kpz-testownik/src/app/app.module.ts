@@ -17,6 +17,7 @@ import { TokenInterceptor } from './token.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MessageComponent } from './message/message.component';
+import { QuizComponent } from './quiz/quiz.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MessageComponent } from './message/message.component';
     SummaryComponent,
     TopBarComponent,
     MessageComponent,
+    QuizComponent,
   ],
   imports: [
     BrowserModule,
