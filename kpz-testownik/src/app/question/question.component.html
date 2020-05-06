@@ -3,7 +3,6 @@
     {{question.content}}
   </div>
   <div class="card-body">
-    <div class="container p-0 m-0">
       <div *ngIf="!wasChecked; else afterCheck">
         <div *ngIf='question.questionType == "TrueFalse"'>
           <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
@@ -84,6 +83,5 @@
           </div>
         </div>
       </ng-template>
-    </div>
   </div>
 </div>
