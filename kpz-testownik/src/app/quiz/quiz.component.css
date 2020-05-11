@@ -1,0 +1,8 @@
+#showCommentButton {
+  color: var(--light);
+}
+
+#showCommentButton:hover {
+  color: var(--white);
+  background-color: var(--dark);
+}

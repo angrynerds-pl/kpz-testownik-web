@@ -21,7 +21,7 @@ export class SummaryComponent implements OnInit {
     this.count = result.numberOfQuestions;
     this.correct = result.correctAnswers;
     this.wrong = result.wrongAnswers;
-    this.percentage = this.correct / this.count * 100 + "%";
+    this.percentage = this.correct / this.count * 100;
   }
 
   ngOnInit(): void {

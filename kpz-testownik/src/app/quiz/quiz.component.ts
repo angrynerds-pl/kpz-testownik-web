@@ -26,6 +26,7 @@ export class QuizComponent implements OnInit {
   incorrectCount = 0;
   learnedCount = 0;
   reocurences: Array<any>;
+  isCommentCollapsed: boolean = true
 
   constructor(
     private quizService: QuizService,
@@ -54,6 +55,7 @@ export class QuizComponent implements OnInit {
       this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
       this.nextSubject.next();
       this.wasCheckButtonClicked = false;
+      this.isCommentCollapsed = true;
     } else {
       const result: QuizResult = {
         quizName: this.quizService.quizName,
