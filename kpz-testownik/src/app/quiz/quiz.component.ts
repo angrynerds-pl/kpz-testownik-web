@@ -26,7 +26,8 @@ export class QuizComponent implements OnInit {
   incorrectCount = 0;
   learnedCount = 0;
   reocurences: Array<any>;
-  isCommentCollapsed: boolean = true
+  isCommentCollapsed: boolean = true;
+  wasAnswerProvided: boolean = false;
 
   constructor(
     private quizService: QuizService,
@@ -44,6 +45,8 @@ export class QuizComponent implements OnInit {
   ngOnInit(): void {}
 
   onNext(): void {
+    this.wasAnswerProvided = false;
+
     const temp = this.reocurences.filter((v) => {
       return v.repeatCount > 0;
     });
@@ -85,6 +88,10 @@ export class QuizComponent implements OnInit {
   onCheck(): void {
     this.checkSubject.next();
     this.wasCheckButtonClicked = true;
+  }
+
+  onAnswerProvided(): void {
+    this.wasAnswerProvided = true;
   }
 
   onAnswer(isAnswereCorrect): void {

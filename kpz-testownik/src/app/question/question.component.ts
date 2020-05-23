@@ -12,6 +12,7 @@ export class QuestionComponent implements OnInit {
   @Input() question: Question;
   @Input() check: Subject<void> = new Subject<void>();
   @Input() next: Subject<void> = new Subject<void>();
+  @Output() answereProvided: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() answered: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   userAnswers: Array<boolean>;
@@ -52,6 +53,9 @@ export class QuestionComponent implements OnInit {
       case QuestionType.TrueFalse:
         this.userAnswers[index] = value;
         break;
+    }
+    if (this.userAnswers.some((value) => value !== undefined)) {
+      this.answereProvided.emit(true);
     }
   }
 

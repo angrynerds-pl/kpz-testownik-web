@@ -2,7 +2,8 @@
   <div class="row">
     <div class="col-md-8 mb-3">
       <app-question [question]="currentQuestion" [check]="checkSubject.asObservable()"
-        [next]="nextSubject.asObservable()" (answered)="onAnswer($event)"></app-question>
+        [next]="nextSubject.asObservable()" (answereProvided)="onAnswerProvided($event)" (answered)="onAnswer($event)">
+      </app-question>
     </div>
 
     <div class="col-md-4 mb-3">
@@ -27,7 +28,7 @@
 
         <div class="mt-auto">
           <button *ngIf="!wasCheckButtonClicked" type="button" class="btn btn-secondary btn-block border border-primary"
-            (click)="onCheck()">
+            [disabled]="!wasAnswerProvided" (click)="onCheck()">
             <h5>Sprawdź</h5>
           </button>
           <button *ngIf="wasCheckButtonClicked" type="button" class="btn btn-secondary btn-block border border-primary"
