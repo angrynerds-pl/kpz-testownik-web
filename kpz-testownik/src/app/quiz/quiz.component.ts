@@ -9,19 +9,27 @@ import { first } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 
+export enum QuizState {
+  BeforeCheck,
+  BeforeNext,
+  BeforeFinish,
+}
+
 @Component({
   selector: "app-quiz",
   templateUrl: "./quiz.component.html",
   styleUrls: ["./quiz.component.css"],
 })
 export class QuizComponent implements OnInit {
+  QuizState = QuizState
+
   checkSubject: Subject<void> = new Subject<void>();
   nextSubject: Subject<void> = new Subject<void>();
 
   quiz: Quiz;
   currentQuestion: Question;
   currentQuestionIndex: number = 0;
-  wasCheckButtonClicked: boolean = false;
+  quizState: QuizState = QuizState.BeforeCheck;
   correctCount = 0;
   incorrectCount = 0;
   learnedCount = 0;
@@ -44,6 +52,11 @@ export class QuizComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  onCheck(): void {
+    this.checkSubject.next();
+    this.quizState = QuizState.BeforeNext;
+  }
+
   onNext(): void {
     this.wasAnswerProvided = false;
 
@@ -57,37 +70,36 @@ export class QuizComponent implements OnInit {
       this.currentQuestionIndex = temp[tempIdx].id;
       this.currentQuestion = this.quiz.questions[this.currentQuestionIndex];
       this.nextSubject.next();
-      this.wasCheckButtonClicked = false;
+      this.quizState = QuizState.BeforeCheck;
       this.isCommentCollapsed = true;
     } else {
-      const result: QuizResult = {
-        quizName: this.quizService.quizName,
-        time: 10,
-        singleQuestionRepeat: this.quizService.baseRepeatCount,
-        numberOfQuestions: this.quizService.questionCount,
-        wrongAnswers: this.incorrectCount,
-        correctAnswers: this.correctCount,
-        date: new Date(),
-      };
-      this.http
-        .post(`${environment.apiUrl}/quiz/result`, result)
-        .pipe(first())
-        .subscribe(
-          () => {
-            //this.router.navigate(["/"]);
-            this.router.navigate(["summary"], { state: { result: result } });
-          },
-          (error) => {
-            console.log(error);
-            //this.messageService.error(error);
-          }
-        );
+      this.quizState = QuizState.BeforeFinish;
     }
   }
 
-  onCheck(): void {
-    this.checkSubject.next();
-    this.wasCheckButtonClicked = true;
+  onFinish(): void {
+    const result: QuizResult = {
+      quizName: this.quizService.quizName,
+      time: 10,
+      singleQuestionRepeat: this.quizService.baseRepeatCount,
+      numberOfQuestions: this.quizService.questionCount,
+      wrongAnswers: this.incorrectCount,
+      correctAnswers: this.correctCount,
+      date: new Date(),
+    };
+    this.http
+      .post(`${environment.apiUrl}/quiz/result`, result)
+      .pipe(first())
+      .subscribe(
+        () => {
+          //this.router.navigate(["/"]);
+          this.router.navigate(["summary"], { state: { result: result } });
+        },
+        (error) => {
+          console.log(error);
+          //this.messageService.error(error);
+        }
+      );
   }
 
   onAnswerProvided(): void {

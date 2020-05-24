@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-8 mb-3">
       <app-question [question]="currentQuestion" [check]="checkSubject.asObservable()"
-        [next]="nextSubject.asObservable()" (answereProvided)="onAnswerProvided($event)" (answered)="onAnswer($event)">
+        [next]="nextSubject.asObservable()" (answereProvided)="onAnswerProvided()" (answered)="onAnswer($event)">
       </app-question>
     </div>
 
@@ -26,15 +26,18 @@
           </div>
         </div>
 
-        <div class="mt-auto">
-          <button *ngIf="!wasCheckButtonClicked" type="button" class="btn btn-secondary btn-block border border-primary"
+        <div class="mt-auto" [ngSwitch]="quizState">
+          <button *ngSwitchCase="QuizState.BeforeCheck" type="button" class="btn btn-secondary btn-block border border-primary"
             [disabled]="!wasAnswerProvided" (click)="onCheck()">
             <h5>Sprawdź</h5>
           </button>
-          <button *ngIf="wasCheckButtonClicked" type="button" class="btn btn-secondary btn-block border border-primary"
+          <button *ngSwitchCase="QuizState.BeforeNext" type="button" class="btn btn-secondary btn-block border border-primary"
             (click)="onNext()">
             <h5>Dalej</h5>
           </button>
+          <button *ngSwitchCase="QuizState.BeforeFinish" type="button" class="btn btn-secondary btn-block border border-primary" (click)="onFinish()">
+            <h5>Zakończ</h5>
+        </button>
         </div>
       </div>
     </div>
