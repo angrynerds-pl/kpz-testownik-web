@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div *ngIf="currentQuestion.comment" class="row">
 
     <div class="col-md-12 mb-3">
       <div class="card text-white">
@@ -52,9 +52,7 @@
           komentarz</button>
         <div id="collapseComment" class="card-body" [class.collapse]="isCommentCollapsed">
           <div class="panel-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, quos, accusamus. Quidem, molestiae. Ipsam
-              consequatur impedit voluptatem, quod qui perferendis fugiat. Eos adipisci dolorem doloremque quos debitis
-              excepturi ex itaque!</p>
+            <p>{{currentQuestion.comment}}</p>
           </div>
         </div>
       </div>

@@ -25,6 +25,7 @@ export interface Question {
   questionType: QuestionType;
   contentType: ContentType;
   content: string;
+  comment?: string;
   answers: {
     contentType: ContentType;
     content: string;
