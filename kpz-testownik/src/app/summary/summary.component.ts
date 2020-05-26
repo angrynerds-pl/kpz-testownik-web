@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
 import { QuizResult } from '../quiz-result.model';
+import { QuizService } from '../quiz.service';
+import { Question } from '../quiz.model';
 
 @Component({
   selector: "app-summary",
@@ -12,9 +14,11 @@ export class SummaryComponent implements OnInit {
   wrong: number = 0;
   percentage: string = "";
   count: number = 0;
+  isVisibleArr: Array<boolean>;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public quizService: QuizService
   ) {
     const result: QuizResult = this.router.getCurrentNavigation().extras.state.result;
 
@@ -22,14 +26,27 @@ export class SummaryComponent implements OnInit {
     this.correct = result.correctAnswers;
     this.wrong = result.wrongAnswers;
     this.percentage = this.correct / this.count * 100 + "%";
+
+
+    this.isVisibleArr = new Array<boolean>(this.quizService.questionCount);
+    this.isVisibleArr.fill(false);
+    this.isVisibleArr[0] = true;
   }
 
   ngOnInit(): void {
-    // this.count = score.length;
-    // score.forEach(element => {
-    //   if(element)
-    //     this.correct++;
-    //   this.percentage = ((this.correct/score.length)*100).toPrecision(3);
-    // });
+
+  }
+
+  onListItemClick(idx: number): void {
+    this.isVisibleArr.fill(false);
+    this.isVisibleArr[idx] = true;
+  }
+
+  getQuestionText(idx: number): string {
+    return this.quizService.currentQuiz.questions[idx].content;
+  }
+
+  getQuestion(idx: number): Question {
+    return this.quizService.currentQuiz.questions[idx];
   }
 }

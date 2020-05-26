@@ -1,0 +1,35 @@
+<div *ngIf='question.questionType == "TrueFalse"'>
+  <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+    <div class="col-lg-8 align-self-center">
+      <span class="text-white">{{answer.content}}</span>
+    </div>
+    <div class="col-lg-4">
+      <div class="row">
+        <div class="col-6">
+          <button type="checkbox" class="btn btn-block btn-outline-secondary px-0" [ngClass]="{
+                  'btn-outline-secondary': answer.isCorrect === false,
+                  'btn-outline-success': answer.isCorrect === true}">
+            <span class="text-white text-nowrap">Prawda</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <button type="checkbox" class="btn btn-block btn-outline-secondary px-0" [ngClass]="{
+                  'btn-outline-secondary': answer.isCorrect === true,
+                  'btn-outline-success': answer.isCorrect === false}">
+            <span class="text-white text-nowrap">Fałsz</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf='question.questionType != "TrueFalse"'>
+  <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+    <button type="checkbox" class="btn btn-block my-1" [ngClass]="{
+            'btn-outline-secondary': !answer.isCorrect,
+            'btn-outline-success': answer.isCorrect}">
+      <span class="text-white">{{answer.content}}</span>
+    </button>
+  </div>
+</div>

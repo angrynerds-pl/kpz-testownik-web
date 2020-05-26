@@ -18,6 +18,7 @@ import { ErrorInterceptor } from './error.interceptor';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MessageComponent } from './message/message.component';
 import { QuizComponent } from './quiz/quiz.component';
+import { QuestionSummaryComponent } from './question-summary/question-summary.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { QuizComponent } from './quiz/quiz.component';
     TopBarComponent,
     MessageComponent,
     QuizComponent,
+    QuestionSummaryComponent,
   ],
   imports: [
     BrowserModule,

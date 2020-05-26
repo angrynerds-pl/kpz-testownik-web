@@ -6,13 +6,15 @@ import { Subject, Subscription } from "rxjs";
 @Component({
   selector: "app-question",
   templateUrl: "./question.component.html",
-  styleUrls: ["./question.component.css"],
+  styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
   @Input() question: Question;
   @Input() check: Subject<void> = new Subject<void>();
   @Input() next: Subject<void> = new Subject<void>();
-  @Output() answereProvided: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() answereProvided: EventEmitter<boolean> = new EventEmitter<
+    boolean
+  >();
   @Output() answered: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   userAnswers: Array<boolean>;
@@ -27,9 +29,7 @@ export class QuestionComponent implements OnInit {
     this.checkSubscription = this.check.subscribe(() => this.onCheck());
     this.nextSubscription = this.next.subscribe(() => this.onNext());
 
-    this.userAnswers = new Array<boolean>(this.question.answers.length).fill(
-      undefined
-    );
+    this.userAnswers = new Array<boolean>(10);
   }
 
   ngOnDestroy(): void {
@@ -54,7 +54,7 @@ export class QuestionComponent implements OnInit {
         this.userAnswers[index] = value;
         break;
     }
-    if (this.userAnswers.some((value) => value !== undefined)) {
+    if (this.userAnswers.some(value => value !== undefined)) {
       this.answereProvided.emit(true);
     }
   }
@@ -79,7 +79,7 @@ export class QuestionComponent implements OnInit {
         break;
     }
 
-    const isAnswereCorrect = correctChoices.every((value) => {
+    const isAnswereCorrect = correctChoices.every(value => {
       return value;
     });
 
@@ -88,11 +88,14 @@ export class QuestionComponent implements OnInit {
 
   onNext(): void {
     this.wasChecked = false;
-    this.userAnswers.fill(undefined);
+    this.userAnswers = new Array<boolean>(10).fill(
+      undefined
+    );
   }
 
   onCheck(): void {
     this.wasChecked = true;
+    this.userAnswers = this.userAnswers.slice(0, this.question.answers.length)
     const isAnswereCorrect = this.isAnswerCorrect(this.question.questionType);
     this.answered.emit(isAnswereCorrect);
   }

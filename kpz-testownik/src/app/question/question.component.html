@@ -3,85 +3,85 @@
     {{question.content}}
   </div>
   <div class="card-body">
-      <div *ngIf="!wasChecked; else afterCheck">
-        <div *ngIf='question.questionType == "TrueFalse"'>
-          <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
-            <div class="col-lg-8 align-self-center">
-              <span class="text-white">{{answer.content}}</span>
-            </div>
-            <div class="col-lg-4">
-              <div class="row">
-                <div class="col-6">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
-                    (click)="onAnswerSelect(i, true)" [class.active]="userAnswers[i]">
-                    <span class="text-white text-nowrap text-middle">Prawda</span>
-                  </button>
-                </div>
-                <div class="col-6">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
-                    (click)="onAnswerSelect(i, false)" [class.active]="userAnswers[i] === false">
-                    <span class="text-white text-nowrap">Fałsz</span>
-                  </button>
-                </div>
+    <div *ngIf="!wasChecked; else afterCheck">
+      <div *ngIf='question.questionType == "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+          <div class="col-lg-8 align-self-center">
+            <span class="text-white">{{answer.content}}</span>
+          </div>
+          <div class="col-lg-4">
+            <div class="row">
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, true)" [class.active]="userAnswers[i]">
+                  <span class="text-white text-nowrap text-middle">Prawda</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, false)" [class.active]="userAnswers[i] === false">
+                  <span class="text-white text-nowrap">Fałsz</span>
+                </button>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div *ngIf='question.questionType != "TrueFalse"'>
-          <div *ngFor="let answer of question.answers; index as i;" class="d-block">
-            <button type="checkbox" class="btn btn-block btn-outline-secondary my-1" (click)="onAnswerSelect(i)"
-              [class.active]="userAnswers[i] === true">
-              <span class="text-white">{{answer.content}}</span>
-            </button>
           </div>
         </div>
       </div>
 
-      <ng-template #afterCheck>
-        <div *ngIf='question.questionType == "TrueFalse"'>
-          <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
-            <div class="col-lg-8 align-self-center">
-              <span class="text-white">{{answer.content}}</span>
-            </div>
-            <div class="col-lg-4">
-              <div class="row">
-                <div class="col-6">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
-                    (click)="onAnswerSelect(i, true)" [ngClass]="{
+      <div *ngIf='question.questionType != "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+          <button type="checkbox" class="btn btn-block btn-outline-secondary my-1" (click)="onAnswerSelect(i)"
+            [class.active]="userAnswers[i] === true">
+            <span class="text-white">{{answer.content}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #afterCheck>
+      <div *ngIf='question.questionType == "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+          <div class="col-lg-8 align-self-center">
+            <span class="text-white">{{answer.content}}</span>
+          </div>
+          <div class="col-lg-4">
+            <div class="row">
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, true)" [ngClass]="{
                   'btn-outline-secondary': isCorrect(i, false) && !userAnswers[i],
                   'btn-outline-danger': isCorrect(i, false) && userAnswers[i],
                   'btn-outline-warning': isCorrect(i, true) && !userAnswers[i],
                   'btn-outline-success': isCorrect(i, true) && userAnswers[i]}">
-                    <span class="text-white text-nowrap">Prawda</span>
-                  </button>
-                </div>
-                <div class="col-6">
-                  <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
-                    (click)="onAnswerSelect(i, false)" [ngClass]="{
+                  <span class="text-white text-nowrap">Prawda</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, false)" [ngClass]="{
                   'btn-outline-secondary': isCorrect(i, true) && userAnswers[i] !== false,
                   'btn-outline-danger': isCorrect(i, true) && userAnswers[i] === false,
                   'btn-outline-warning': isCorrect(i, false) && userAnswers[i] !== false,
                   'btn-outline-success': isCorrect(i, false) && userAnswers[i] === false}">
-                    <span class="text-white text-nowrap">Fałsz</span>
-                  </button>
-                </div>
+                  <span class="text-white text-nowrap">Fałsz</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div *ngIf='question.questionType != "TrueFalse"'>
-          <div *ngFor="let answer of question.answers; index as i;" class="d-block">
-            <button type="checkbox" class="btn btn-block my-1" (click)="onAnswerSelect(i)" [ngClass]="{
+      <div *ngIf='question.questionType != "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+          <button type="checkbox" class="btn btn-block my-1" (click)="onAnswerSelect(i)" [ngClass]="{
             'btn-outline-secondary': !isCorrect(i) && userAnswers[i] === undefined,
             'btn-outline-danger': !isCorrect(i) && userAnswers[i],
             'btn-outline-warning': isCorrect(i) && userAnswers[i] === undefined,
             'btn-outline-success': isCorrect(i) && userAnswers[i]}">
-              <span class="text-white">{{answer.content}}</span>
-            </button>
-          </div>
+            <span class="text-white">{{answer.content}}</span>
+          </button>
         </div>
-      </ng-template>
+      </div>
+    </ng-template>
   </div>
 </div>
