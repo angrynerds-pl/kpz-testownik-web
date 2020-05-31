@@ -33,7 +33,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           errorMessage = `Error: ${e.error.message}`;
         } else {
           // server-side error
-          errorMessage = `Error Code: ${e.status}\nMessage: ${e.message}`;
+          errorMessage = `Error Code: ${e.status}\nMessage: ${e.error}`;
           if (e.status === HttpStatus.UNAUTHORIZED) {
             this.authenticationService.logout();
             location.reload(true);
