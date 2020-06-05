@@ -81,8 +81,9 @@ export class QuestionComponent implements OnInit {
 
   onAnswerContentZoom(index: number): void {
     clearTimeout(this.clickTimer);
+    this.recentlyClickedAnswer = index;
     if (this.question.answers[this.recentlyClickedAnswer].contentType == ContentType.Image) {
-      this.showModal();
+      this.showModal()
     }
   }
 

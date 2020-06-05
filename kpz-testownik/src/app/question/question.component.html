@@ -7,8 +7,8 @@
     <div *ngIf="!wasChecked; else afterCheck">
       <div *ngIf='question.questionType == "TrueFalse"'>
         <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
-          <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto">
-            <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" />
+          <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto" style="max-height: 150px;">
+            <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" (dblclick)="onAnswerContentZoom(i)" />
             <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
           </div>
           <div class="col-lg-4 d-block my-auto">
@@ -44,13 +44,16 @@
       </div>
     </div>
 
+
+
     <ng-template #afterCheck>
       <div *ngIf='question.questionType == "TrueFalse"'>
         <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
-          <div class="col-lg-8 align-self-center">
-            <span class="text-white">{{answer.content}}</span>
+          <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto" style="max-height: 150px;">
+            <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" />
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 my-auto">
             <div class="row">
               <div class="col-6">
                 <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
@@ -79,12 +82,15 @@
 
       <div *ngIf='question.questionType != "TrueFalse"'>
         <div *ngFor="let answer of question.answers; index as i;" class="d-block">
-          <button type="checkbox" class="btn btn-block my-1" (click)="onAnswerSelect(i)" [ngClass]="{
+          <button [ngSwitch]="answer.contentType" type="checkbox" class="btn btn-block my-1" [ngClass]="{
             'btn-outline-secondary': !isCorrect(i) && userAnswers[i] === undefined,
             'btn-outline-danger': !isCorrect(i) && userAnswers[i],
             'btn-outline-warning': isCorrect(i) && userAnswers[i] === undefined,
             'btn-outline-success': isCorrect(i) && userAnswers[i]}">
-            <span class="text-white">{{answer.content}}</span>
+            <div *ngSwitchCase="ContentType.Image" class="overflow-auto" style="max-height: 150px;">
+              <img  src={{answer.content}} class="img-fluid mb-2" />
+            </div>
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
           </button>
         </div>
       </div>
@@ -100,7 +106,7 @@
         <button type="button" class="close" data-dismiss="modal" (click)="hideModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <img *ngIf="recentlyClickedAnswer" src={{question.answers[recentlyClickedAnswer].content}} class="img-fluid" />
+        <img *ngIf="recentlyClickedAnswer >= 0" src={{question.answers[recentlyClickedAnswer].content}} class="img-fluid" />
       </div>
     </div>
   </div>
