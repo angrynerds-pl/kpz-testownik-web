@@ -4,8 +4,8 @@ import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { InitComponent } from "./init/init.component";
-import { QuestionComponent } from "./question/question.component";
 import { SummaryComponent } from "./summary/summary.component";
+import { QuizComponent } from './quiz/quiz.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "/home.php", pathMatch: "full" },
@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
   { path: "init", component: InitComponent },
-  { path: "question", component: QuestionComponent },
+  { path: "quiz", component: QuizComponent },
   { path: "summary", component: SummaryComponent }
 ];
 

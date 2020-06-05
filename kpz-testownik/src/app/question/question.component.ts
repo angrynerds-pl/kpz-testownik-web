@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
-import { Question } from "../question.model";
-import { test } from "../test-mock";
+import { Question, QuestionType } from "../quiz.model";
+import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-question",
@@ -9,39 +9,94 @@ import { test } from "../test-mock";
   styleUrls: ["./question.component.css"]
 })
 export class QuestionComponent implements OnInit {
-  test: Question[];
-  currentQuestion: Question;
-  currentQuestionIndex: number = 0;
-  isAnswerSelected: Array<boolean>;
+  @Input() question: Question;
+  @Input() check: Subject<void> = new Subject<void>();
+  @Input() next: Subject<void> = new Subject<void>();
+  @Output() answereProvided: EventEmitter<boolean> = new EventEmitter<
+    boolean
+  >();
+  @Output() answered: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  userAnswers: Array<boolean>;
+  wasChecked: boolean = false;
+
+  private checkSubscription: Subscription;
+  private nextSubscription: Subscription;
 
   constructor() {}
-  // these operations on date should be done with service
-  // but it's only for presentation
+
   ngOnInit(): void {
-    this.test = test;
-    if (this.test.length > 0) {
-      this.currentQuestion = this.test[this.currentQuestionIndex];
-    }
-    this.isAnswerSelected =
-      new Array(this.currentQuestion.answers.length).fill(false);
+    this.checkSubscription = this.check.subscribe(() => this.onCheck());
+    this.nextSubscription = this.next.subscribe(() => this.onNext());
+
+    this.userAnswers = new Array<boolean>(10);
   }
 
-  nextQuestion(): void {
-    ++this.currentQuestionIndex;
-    if(this.currentQuestionIndex < this.test.length) {
-      this.currentQuestion = this.test[this.currentQuestionIndex];
-      this.isAnswerSelected.fill(false);
+  ngOnDestroy(): void {
+    this.checkSubscription.unsubscribe();
+    this.nextSubscription.unsubscribe();
+  }
+
+  isCorrect(index: number, value: boolean = true) {
+    return this.question.answers[index].isCorrect === value;
+  }
+
+  onAnswerSelect(index: number, value?: boolean): void {
+    switch (this.question.questionType) {
+      case QuestionType.MultipleAnswere:
+        this.userAnswers[index] = !this.userAnswers[index];
+        break;
+      case QuestionType.SingleAnswere:
+        this.userAnswers.fill(undefined);
+        this.userAnswers[index] = true;
+        break;
+      case QuestionType.TrueFalse:
+        this.userAnswers[index] = value;
+        break;
     }
-    else {
-      // navigate to summary
+    if (this.userAnswers.some(value => value !== undefined)) {
+      this.answereProvided.emit(true);
     }
   }
 
-  getProgress(): number {
-    return (this.currentQuestionIndex + 1) / this.test.length * 100;
+  isAnswerCorrect(questionType: QuestionType) {
+    let correctChoices: Array<boolean>;
+
+    switch (questionType) {
+      case QuestionType.MultipleAnswere:
+      case QuestionType.SingleAnswere:
+        correctChoices = this.userAnswers.map((v, i) => {
+          return (
+            this.question.answers[i].isCorrect === v ||
+            (this.question.answers[i].isCorrect === false && v === undefined)
+          );
+        });
+        break;
+      case QuestionType.TrueFalse:
+        correctChoices = this.userAnswers.map((v, i) => {
+          return this.question.answers[i].isCorrect === v;
+        });
+        break;
+    }
+
+    const isAnswereCorrect = correctChoices.every(value => {
+      return value;
+    });
+
+    return isAnswereCorrect;
   }
 
-  onAnswerSelect(index: number): void {
-    this.isAnswerSelected[index] = !this.isAnswerSelected[index];
+  onNext(): void {
+    this.wasChecked = false;
+    this.userAnswers = new Array<boolean>(10).fill(
+      undefined
+    );
+  }
+
+  onCheck(): void {
+    this.wasChecked = true;
+    this.userAnswers = this.userAnswers.slice(0, this.question.answers.length)
+    const isAnswereCorrect = this.isAnswerCorrect(this.question.questionType);
+    this.answered.emit(isAnswereCorrect);
   }
 }

@@ -3,11 +3,7 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 
-import {
-  DropzoneModule,
-  DropzoneConfigInterface,
-  DROPZONE_CONFIG
-} from "ngx-dropzone-wrapper";
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
@@ -21,10 +17,9 @@ import { TokenInterceptor } from './token.interceptor';
 import { ErrorInterceptor } from './error.interceptor';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MessageComponent } from './message/message.component';
+import { QuizComponent } from './quiz/quiz.component';
+import { QuestionSummaryComponent } from './question-summary/question-summary.component';
 
-const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-  // Change this to your upload POST address:
-};
 
 @NgModule({
   declarations: [
@@ -37,16 +32,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SummaryComponent,
     TopBarComponent,
     MessageComponent,
+    QuizComponent,
+    QuestionSummaryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    DropzoneModule,
+    NgxFileDropModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [
-    { provide: DROPZONE_CONFIG, useValue: DEFAULT_DROPZONE_CONFIG },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

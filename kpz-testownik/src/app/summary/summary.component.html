@@ -1,16 +1,52 @@
-<div style="text-align: center;">
-    <div class="card border-primary mb-3">
-        <div class="card-header"><h3>Your score</h3></div>
-        <div class="card-body">
-          <h3 class="card-title" style="padding-top: 40px; color: greenyellow;">Correct answers</h3>
-            <h3 style>34/56</h3>
-            <h1 style="color: greenyellow; padding-bottom: 40px;">60%</h1>
-          <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/init">
-            Try again
-          </button>
-          <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/home.php">
-            Start a new test
-          </button>
+<div class="container p-0">
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="row my-1">
+        <div class="card text-white mb-3" style="width: 100%;">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-auto">
+                <h4>Poprawne odpowiedzi:</h4>
+              </div>
+              <div class="col-auto">
+                <h4>{{correct}}/{{count}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto">
+                <h4>Wynik:</h4>
+              </div>
+              <div class="col-auto">
+                <h4>{{percentage}}</h4>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-block mt-3" routerLink="/init">
+              Spróbuj ponownie
+            </button>
+            <button type="button" class="btn btn-secondary btn-block" routerLink="/home.php">
+              Rozpocznij nowy test
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngFor="let isVisible of isVisibleArr; index as i;" class="row my-1">
+        <div class="card text-white" style="width: 100%;">
+          <button id="showCommentButton" type="button" class="card-header p-2 text-left btn btn-outline-secondary"
+            data-toggle="collapse" data-target="collapseComment" (click)="onListItemClick(i)">{{getQuestionText(i)}}</button>
+          <div id="collapseComment" class="card-body" [class.collapse]="!isVisible">
+            <div class="panel-body">
+              <app-question-summary [question]="getQuestion(i)">
+
+              </app-question-summary>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
