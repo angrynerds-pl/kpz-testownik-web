@@ -1,5 +1,5 @@
 <div class="card border-primary">
-  <div [ngSwitch]="question.contentType" class="card-header overflow-auto" style="max-height: 200px;" (dblclick)="onQuestionContentZoom()">
+  <div [ngSwitch]="question.contentType" class="card-header text-center overflow-auto" style="max-height: 200px;" (dblclick)="onQuestionContentZoom()">
     <img *ngSwitchCase="ContentType.Image" src={{question.content}} class="img-fluid mb-2" />
     <span *ngSwitchDefault class="text-white">{{question.content}}</span>
   </div>
@@ -103,7 +103,7 @@
         <h5 class="modal-title">Zamknij widok</h5>
         <button type="button" class="close" data-dismiss="modal" (click)="hideModal()">&times;</button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
         <img *ngIf="modalImageSource" src={{modalImageSource}} class="img-fluid" />
       </div>
     </div>
