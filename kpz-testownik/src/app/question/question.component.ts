@@ -24,6 +24,7 @@ export class QuestionComponent implements OnInit {
   recentlyClickedAnswer: number;
   private clickTimer: any;
   isModalVisible: boolean = false;
+  modalImageSource: string;
 
   private checkSubscription: Subscription;
   private nextSubscription: Subscription;
@@ -83,6 +84,14 @@ export class QuestionComponent implements OnInit {
     clearTimeout(this.clickTimer);
     this.recentlyClickedAnswer = index;
     if (this.question.answers[this.recentlyClickedAnswer].contentType == ContentType.Image) {
+      this.modalImageSource = this.question.answers[this.recentlyClickedAnswer].content;
+      this.showModal()
+    }
+  }
+
+  onQuestionContentZoom(): void {
+    if (this.question.contentType == ContentType.Image) {
+      this.modalImageSource = this.question.content;
       this.showModal()
     }
   }
