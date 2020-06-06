@@ -1,9 +1,10 @@
 <div *ngIf='question.questionType == "TrueFalse"'>
   <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
-    <div class="col-lg-8 align-self-center">
-      <span class="text-white">{{answer.content}}</span>
+    <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto" style="max-height: 150px;">
+      <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" />
+      <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 d-block my-auto">
       <div class="row">
         <div class="col-6">
           <button type="checkbox" class="btn btn-block btn-outline-secondary px-0" [ngClass]="{
@@ -26,10 +27,13 @@
 
 <div *ngIf='question.questionType != "TrueFalse"'>
   <div *ngFor="let answer of question.answers; index as i;" class="d-block">
-    <button type="checkbox" class="btn btn-block my-1" [ngClass]="{
+    <button [ngSwitch]="answer.contentType" type="checkbox" class="btn btn-block my-1" [ngClass]="{
             'btn-outline-secondary': !answer.isCorrect,
             'btn-outline-success': answer.isCorrect}">
-      <span class="text-white">{{answer.content}}</span>
+      <div *ngSwitchCase="ContentType.Image" class="overflow-auto" style="max-height: 150px;">
+        <img src={{answer.content}} class="img-fluid mb-2" />
+      </div>
+      <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
     </button>
   </div>
 </div>
