@@ -34,13 +34,18 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div *ngFor="let isVisible of isVisibleArr; index as i;" class="row my-1">
+      <div *ngFor="let question of getQuestions(); index as i;" class="row mb-3">
         <div class="card text-white" style="width: 100%;">
           <button id="showCommentButton" type="button" class="card-header p-2 text-left btn btn-outline-secondary"
-            data-toggle="collapse" data-target="collapseComment" (click)="onListItemClick(i)">{{getQuestionText(i)}}</button>
-          <div id="collapseComment" class="card-body" [class.collapse]="!isVisible">
+            data-toggle="collapse" data-target="collapseComment" (click)="onListItemClick(i)">
+            <div [ngSwitch]="question.contentType" class="overflow-auto text-center" style="max-height: 200px;">
+              <img *ngSwitchCase="ContentType.Image" src={{question.content}} class="img-fluid mb-2" />
+              <span *ngSwitchDefault class="text-white">{{question.content}}</span>
+            </div>
+          </button>
+          <div id="collapseComment" class="card-body" [class.collapse]="!isVisibleArr[i]">
             <div class="panel-body">
-              <app-question-summary [question]="getQuestion(i)">
+              <app-question-summary [question]="question">
 
               </app-question-summary>
             </div>

@@ -26,18 +26,30 @@
           </div>
         </div>
 
+        <div class="mt-3 text-center">
+          <h5>Liczba pytań</h5>
+          <h4>{{quiz.questions.length}}</h4>
+        </div>
+
+        <div class="mt-2 text-center">
+          <h5>Numer pytania</h5>
+          <h4>{{currentQuestionIndex + 1}}</h4>
+        </div>
+
         <div class="mt-auto" [ngSwitch]="quizState">
-          <button *ngSwitchCase="QuizState.BeforeCheck" type="button" class="btn btn-secondary btn-block border border-primary"
-            [disabled]="!wasAnswerProvided" (click)="onCheck()">
+          <button *ngSwitchCase="QuizState.BeforeCheck" type="button"
+            class="btn btn-secondary btn-block border border-primary" [disabled]="!wasAnswerProvided"
+            (click)="onCheck()">
             <h5>Sprawdź</h5>
           </button>
-          <button *ngSwitchCase="QuizState.BeforeNext" type="button" class="btn btn-secondary btn-block border border-primary"
-            (click)="onNext()">
+          <button *ngSwitchCase="QuizState.BeforeNext" type="button"
+            class="btn btn-secondary btn-block border border-primary" (click)="onNext()">
             <h5>Dalej</h5>
           </button>
-          <button *ngSwitchCase="QuizState.BeforeFinish" type="button" class="btn btn-secondary btn-block border border-primary" (click)="onFinish()">
+          <button *ngSwitchCase="QuizState.BeforeFinish" type="button"
+            class="btn btn-secondary btn-block border border-primary" (click)="onFinish()">
             <h5>Zakończ</h5>
-        </button>
+          </button>
         </div>
       </div>
     </div>

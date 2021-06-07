@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
 import { QuizResult } from '../quiz-result.model';
 import { QuizService } from '../quiz.service';
-import { Question } from '../quiz.model';
+import { Question, ContentType } from '../quiz.model';
 
 @Component({
   selector: "app-summary",
@@ -10,6 +10,7 @@ import { Question } from '../quiz.model';
   styleUrls: ["./summary.component.css"],
 })
 export class SummaryComponent implements OnInit {
+  ContentType = ContentType;
   correct: number = 0;
   wrong: number = 0;
   percentage: string = "";
@@ -42,11 +43,15 @@ export class SummaryComponent implements OnInit {
     this.isVisibleArr[idx] = true;
   }
 
-  getQuestionText(idx: number): string {
+  getQuestionContent(idx: number): string {
     return this.quizService.currentQuiz.questions[idx].content;
   }
 
   getQuestion(idx: number): Question {
     return this.quizService.currentQuiz.questions[idx];
+  }
+
+  getQuestions(): Question[] {
+    return this.quizService.quiz.questions;
   }
 }
