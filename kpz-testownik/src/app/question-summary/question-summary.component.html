@@ -1,0 +1,39 @@
+<div *ngIf='question.questionType == "TrueFalse"'>
+  <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+    <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto text-center" style="max-height: 150px;">
+      <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2 mx-auto" />
+      <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+    </div>
+    <div class="col-lg-4 d-block my-auto">
+      <div class="row">
+        <div class="col-6">
+          <button type="checkbox" class="btn btn-block btn-outline-secondary px-0" [ngClass]="{
+                  'btn-outline-secondary': answer.isCorrect === false,
+                  'btn-outline-success': answer.isCorrect === true}">
+            <span class="text-white text-nowrap">Prawda</span>
+          </button>
+        </div>
+        <div class="col-6">
+          <button type="checkbox" class="btn btn-block btn-outline-secondary px-0" [ngClass]="{
+                  'btn-outline-secondary': answer.isCorrect === true,
+                  'btn-outline-success': answer.isCorrect === false}">
+            <span class="text-white text-nowrap">Fałsz</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf='question.questionType != "TrueFalse"'>
+  <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+    <button [ngSwitch]="answer.contentType" type="checkbox" class="btn btn-block my-1" [ngClass]="{
+            'btn-outline-secondary': !answer.isCorrect,
+            'btn-outline-success': answer.isCorrect}">
+      <div *ngSwitchCase="ContentType.Image" class="overflow-auto" style="max-height: 150px;">
+        <img src={{answer.content}} class="img-fluid mb-2 mx-auto" />
+      </div>
+      <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+    </button>
+  </div>
+</div>

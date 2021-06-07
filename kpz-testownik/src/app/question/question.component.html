@@ -1,0 +1,111 @@
+<div class="card border-primary">
+  <div [ngSwitch]="question.contentType" class="card-header text-center overflow-auto" style="max-height: 200px;" (dblclick)="onQuestionContentZoom()">
+    <img *ngSwitchCase="ContentType.Image" src={{question.content}} class="img-fluid mb-2" />
+    <span *ngSwitchDefault class="text-white">{{question.content}}</span>
+  </div>
+  <div class="card-body">
+    <div *ngIf="!wasChecked; else afterCheck">
+      <div *ngIf='question.questionType == "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+          <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto" style="max-height: 150px;">
+            <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" (dblclick)="onAnswerContentZoom(i)" />
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+          </div>
+          <div class="col-lg-4 d-block my-auto">
+            <div class="row">
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, true)" [class.active]="userAnswers[i]">
+                  <span class="text-white text-nowrap text-middle">Prawda</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, false)" [class.active]="userAnswers[i] === false">
+                  <span class="text-white text-nowrap">Fałsz</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf='question.questionType != "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+          <button [ngSwitch]="answer.contentType" type="checkbox"
+            class="btn btn-block btn-outline-secondary my-1" (click)="onAnswerSelect(i)" (dblclick)="onAnswerContentZoom(i)"
+            [class.active]="userAnswers[i] === true">
+            <div *ngSwitchCase="ContentType.Image" class="overflow-auto" style="max-height: 150px;">
+              <img  src={{answer.content}} class="img-fluid mb-2" />
+            </div>
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #afterCheck>
+      <div *ngIf='question.questionType == "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="row my-1">
+          <div [ngSwitch]="answer.contentType" class="col-lg-8 align-self-center overflow-auto" style="max-height: 150px;">
+            <img *ngSwitchCase="ContentType.Image" src={{answer.content}} class="img-fluid mb-2" />
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+          </div>
+          <div class="col-lg-4 my-auto">
+            <div class="row">
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, true)" [ngClass]="{
+                  'btn-outline-secondary': isCorrect(i, false) && !userAnswers[i],
+                  'btn-outline-danger': isCorrect(i, false) && userAnswers[i],
+                  'btn-outline-warning': isCorrect(i, true) && !userAnswers[i],
+                  'btn-outline-success': isCorrect(i, true) && userAnswers[i]}">
+                  <span class="text-white text-nowrap">Prawda</span>
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="checkbox" class="btn btn-block btn-outline-secondary px-0"
+                  (click)="onAnswerSelect(i, false)" [ngClass]="{
+                  'btn-outline-secondary': isCorrect(i, true) && userAnswers[i] !== false,
+                  'btn-outline-danger': isCorrect(i, true) && userAnswers[i] === false,
+                  'btn-outline-warning': isCorrect(i, false) && userAnswers[i] !== false,
+                  'btn-outline-success': isCorrect(i, false) && userAnswers[i] === false}">
+                  <span class="text-white text-nowrap">Fałsz</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf='question.questionType != "TrueFalse"'>
+        <div *ngFor="let answer of question.answers; index as i;" class="d-block">
+          <button [ngSwitch]="answer.contentType" type="checkbox" class="btn btn-block my-1" [ngClass]="{
+            'btn-outline-secondary': !isCorrect(i) && userAnswers[i] === undefined,
+            'btn-outline-danger': !isCorrect(i) && userAnswers[i],
+            'btn-outline-warning': isCorrect(i) && userAnswers[i] === undefined,
+            'btn-outline-success': isCorrect(i) && userAnswers[i]}">
+            <div *ngSwitchCase="ContentType.Image" class="overflow-auto" style="max-height: 150px;">
+              <img  src={{answer.content}} class="img-fluid mb-2" />
+            </div>
+            <span *ngSwitchDefault class="text-white">{{answer.content}}</span>
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div class="modal" [class.d-block]="isModalVisible">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Zamknij widok</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="hideModal()">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <img *ngIf="modalImageSource" src={{modalImageSource}} class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="container p-0">
+  <div class="row">
+    <div class="col-md-8 mb-3">
+      <app-question [question]="currentQuestion" [check]="checkSubject.asObservable()"
+        [next]="nextSubject.asObservable()" (answereProvided)="onAnswerProvided()" (answered)="onAnswer($event)">
+      </app-question>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="bg-dark border border-primary p-2 d-flex flex-column" style="height: 100%;">
+        <div class="py-2">
+          <span>Udzielone odpowiedzi</span>
+          <div class="progress" style="height: 1.5em;">
+            <div class="progress-bar bg-success p" role="progressbar" [style.width]="getCorrectProgress()">
+              {{correctCount}}</div>
+            <div class="progress-bar bg-danger" role="progressbar" [style.width]="getIncorrectProgress()">
+              {{incorrectCount}}</div>
+          </div>
+        </div>
+
+        <div class="py-2">
+          <span>Opanowane pytania</span>
+          <div class="progress" style="height: 1.5em;">
+            <div class="progress-bar bg-success p" role="progressbar" [style.width]="getLearnedProgress()">
+              {{learnedCount}}</div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-center">
+          <h5>Liczba pytań</h5>
+          <h4>{{quiz.questions.length}}</h4>
+        </div>
+
+        <div class="mt-2 text-center">
+          <h5>Numer pytania</h5>
+          <h4>{{currentQuestionIndex + 1}}</h4>
+        </div>
+
+        <div class="mt-auto" [ngSwitch]="quizState">
+          <button *ngSwitchCase="QuizState.BeforeCheck" type="button"
+            class="btn btn-secondary btn-block border border-primary" [disabled]="!wasAnswerProvided"
+            (click)="onCheck()">
+            <h5>Sprawdź</h5>
+          </button>
+          <button *ngSwitchCase="QuizState.BeforeNext" type="button"
+            class="btn btn-secondary btn-block border border-primary" (click)="onNext()">
+            <h5>Dalej</h5>
+          </button>
+          <button *ngSwitchCase="QuizState.BeforeFinish" type="button"
+            class="btn btn-secondary btn-block border border-primary" (click)="onFinish()">
+            <h5>Zakończ</h5>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentQuestion.comment" class="row">
+
+    <div class="col-md-12 mb-3">
+      <div class="card text-white">
+        <button id="showCommentButton" type="button" class="card-header p-2 text-left btn btn-outline-secondary"
+          data-toggle="collapse" data-target="collapseComment" (click)="isCommentCollapsed = !isCommentCollapsed">Pokaż
+          komentarz</button>
+        <div id="collapseComment" class="card-body" [class.collapse]="isCommentCollapsed">
+          <div class="panel-body">
+            <p>{{currentQuestion.comment}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

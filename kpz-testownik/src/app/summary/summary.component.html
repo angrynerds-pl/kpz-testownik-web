@@ -1,0 +1,57 @@
+<div class="container p-0">
+  <div class="row">
+    <div class="col-md-12">
+
+      <div class="row my-1">
+        <div class="card text-white mb-3" style="width: 100%;">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-auto">
+                <h4>Poprawne odpowiedzi:</h4>
+              </div>
+              <div class="col-auto">
+                <h4>{{correct}}/{{count}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto">
+                <h4>Wynik:</h4>
+              </div>
+              <div class="col-auto">
+                <h4>{{percentage}}</h4>
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary btn-block mt-3" routerLink="/init">
+              Spróbuj ponownie
+            </button>
+            <button type="button" class="btn btn-secondary btn-block" routerLink="/home.php">
+              Rozpocznij nowy test
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div *ngFor="let question of getQuestions(); index as i;" class="row mb-3">
+        <div class="card text-white" style="width: 100%;">
+          <button id="showCommentButton" type="button" class="card-header p-2 text-left btn btn-outline-secondary"
+            data-toggle="collapse" data-target="collapseComment" (click)="onListItemClick(i)">
+            <div [ngSwitch]="question.contentType" class="overflow-auto text-center" style="max-height: 200px;">
+              <img *ngSwitchCase="ContentType.Image" src={{question.content}} class="img-fluid mb-2" />
+              <span *ngSwitchDefault class="text-white">{{question.content}}</span>
+            </div>
+          </button>
+          <div id="collapseComment" class="card-body" [class.collapse]="!isVisibleArr[i]">
+            <div class="panel-body">
+              <app-question-summary [question]="question">
+
+              </app-question-summary>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

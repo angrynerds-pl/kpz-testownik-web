@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-body">
+    <ngx-file-drop [multiple]="false" [directory]="false" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+      (onFileLeave)="fileLeave($event)" accept=".json" dropZoneClassName="py-5 dropzone"
+      contentClassName="dropzone-content">
+      <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+        <div class="text-center">
+          <div class="container">
+            <div class="row my-2">
+              <h5 class="col">Upuść plik JSON tutaj</h5>
+            </div>
+            <div class="row my-2">
+              <div class="col">
+                <button type="button" class="btn btn-outline-primary" (click)="openFileSelector()">Przeglądaj</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-file-drop>
+    <button #initQuizButton hidden routerLink="/init"></button>
+  </div>
+  <div class="p-2">
+    <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/login">
+      Logowanie
+    </button>
+    <button type="button" class="btn btn-primary btn-lg btn-block my-2" routerLink="/register">
+      Rejestracja
+    </button>
+  </div>
+</div>

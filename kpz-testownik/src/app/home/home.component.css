@@ -1,0 +1,9 @@
+.dropzone {
+  border-style: dashed;
+  border-radius: 5px;
+  border-color: var(--primary);
+}
+
+.dropzone-content {
+  color: var(--white);
+}

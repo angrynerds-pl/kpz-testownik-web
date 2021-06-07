@@ -1,0 +1,22 @@
+<div class="card mb-3">
+  <h3 class="card-header">{{quizName}}</h3>
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Autor</span>
+      <span>{{authorName}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Liczba pytań</span>
+      <span>{{questionCount}}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <span>Bazowa liczba powtórzeń</span>
+      <span>{{baseRepeatCount}}</span>
+    </li>
+  </ul>
+</div>
+
+<div class="text-right">
+  <button class="btn btn-primary" routerLink="/quiz">Rozpocznij</button>
+  <a class="btn btn-link" routerLink="/">Anuluj</a>
+</div>
